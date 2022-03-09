@@ -30,7 +30,7 @@ const Create = () => {
     const [placed, setPlaced] = useState(false)
     const [loading, setLoading] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState("COD")
-    const [type, setType] = useState("e-commerce")
+    const [type, setType] = useState("")
     const [selectedItems, setSelectedItems] = useState([])
     const [process, setProcess] = useState({ data: null, loading: false })
     const [coupon, setCoupon] = useState({ loading: false, message: {} })
@@ -49,6 +49,7 @@ const Create = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
     })
 
+    console.log(type)
     // Count total amount
     const TotalAmount = (subTotal, dCharge) => {
         return subTotal + dCharge;
@@ -323,248 +324,254 @@ const Create = () => {
                         <select
                             name="paymentMethod"
                             className="form-control shadow-none"
-                            defaultValue="e-commerece" 
+                            defaultValue="" 
                             onChange={(e) => setType(e.target.value)}                        
                         >
                                 <option value="">--- Select Option ---</option>
                                 <option value="e-commerece">E-Commerce</option>
                                 <option value="print on demand">Print on Demand</option>
                                 <option value="call for tailor">Call for tailor</option>
+                                <option value="studio">Studio</option>
                         </select>
                     </div>
                 </div>
-                <div className="row">
+               {
+                   type==="e-commerece" || type=== "print on demand"?  <div className="row">
                 
-                    {/* Header & search container */}
-                    <div className="col-12 col-padding">
-                        <SearchableSelect
-                            isMulti={true}
-                            placeholder="Search product by SKU"
-                            search={handleProductSearch}
-                            values={handleSelectedProductsValues}
-                        />
-                    </div>
+                   {/* Header & search container */}
+                   <div className="col-12 col-padding">
+                       <SearchableSelect
+                           isMulti={true}
+                           placeholder="Search product by SKU"
+                           search={handleProductSearch}
+                           values={handleSelectedProductsValues}
+                       />
+                   </div>
 
-                    {/* Selected items container */}
-                    <div className="col-12 col-padding selected-products-container">
-                
-                            <div className="card border-0 p-2" >
-                                <div className="card-body shadow-sm bg-white rounded text-center">
-                                    <div className="img-container">
-                                        <img src="https://i.ibb.co/nfN0hdR/undraw-road-to-knowledge-m8s0.png" className="img-fluid" alt="..." />
-                                    </div>
-                                    <p>Test</p>
+                   {/* Selected items container */}
+                   <div className="col-12 col-padding selected-products-container">
+               
+                           <div className="card border-0 p-2" >
+                               <div className="card-body shadow-sm bg-white rounded text-center">
+                                   <div className="img-container">
+                                       <img src="https://i.ibb.co/nfN0hdR/undraw-road-to-knowledge-m8s0.png" className="img-fluid" alt="..." />
+                                   </div>
+                                   <p>Test</p>
 
-                                    <div className="d-flex mt-2">
-                                        <div><p>Quantity: 5</p></div>
-                                        <div className="ml-auto pt-2">
-                                            <button className="btn btn-sm shadow-none rounded-circle btn-desc"
-                                                
-                                                // onClick={() => decrementQuantity(5)}
-                                            >
-                                                <Icon icon={minus} size={15} />
-                                            </button>
-                                            <button className="btn btn-sm shadow-none rounded-circle btn-inc ml-1"
-                                                // onClick={() => incrementQuantity(5)}
-                                            >
-                                                <Icon icon={plus} size={15} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
+                                   <div className="d-flex mt-2">
+                                       <div><p>Quantity: 5</p></div>
+                                       <div className="ml-auto pt-2">
+                                           <button className="btn btn-sm shadow-none rounded-circle btn-desc"
+                                               
+                                               // onClick={() => decrementQuantity(5)}
+                                           >
+                                               <Icon icon={minus} size={15} />
+                                           </button>
+                                           <button className="btn btn-sm shadow-none rounded-circle btn-inc ml-1"
+                                               // onClick={() => incrementQuantity(5)}
+                                           >
+                                               <Icon icon={plus} size={15} />
+                                           </button>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                   </div>
 
-                    {/* Process Order Button */}
-                    
-                        <div className='col-12'>
-                            <form onSubmit={handleSubmit(processOrder)}>
-                                <div className='row'>
-                                    {/* Adress */}
-                                    <div className="col-12 col-lg-6">
-                                        <div className="form-group mb-4">
-                                            {errors.division && errors.division.message ?
-                                                <small className="text-danger">{errors.division && errors.division.message}</small> :
-                                                <small>Address<span className="text-danger">*</span></small>
-                                            }
+                   {/* Process Order Button */}
+                    <div className='col-12'>
+                          <form onSubmit={handleSubmit(processOrder)}>
+                              <div className='row'>
+                                  {/* Adress */}
+                                  <div className="col-12 col-lg-6">
+                                      <div className="form-group mb-4">
+                                          {errors.division && errors.division.message ?
+                                              <small className="text-danger">{errors.division && errors.division.message}</small> :
+                                              <small>Address<span className="text-danger">*</span></small>
+                                          }
 
-                                            <SingleSelect
-                                                options={divisions}
-                                                placeholder={'adress'}
-                                                borderRadius={4}
-                                                error={errors.division && errors.division.message}
-                                                value={(event) => {
-                                                    setSelectedDivision(event)
-                                                    fetchDistrict(event.value)
-                                                    clearErrors("address")
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    
+                                          <SingleSelect
+                                              options={divisions}
+                                              placeholder={'adress'}
+                                              borderRadius={4}
+                                              error={errors.division && errors.division.message}
+                                              value={(event) => {
+                                                  setSelectedDivision(event)
+                                                  fetchDistrict(event.value)
+                                                  clearErrors("address")
+                                              }}
+                                          />
+                                      </div>
+                                  </div>
+                                  
 
-                                    {/* Phone No */}
-                                    {
-                                        <div className="col-12 col-lg-6">
-                                            <div className="form-group mb-4">
-                                                {errors.district && errors.district.message ?
-                                                    <small className="text-danger">{errors.district && errors.district.message}</small> :
-                                                    <small>Phone No<span className="text-danger">*</span></small>
-                                                }
+                                  {/* Phone No */}
+                                  {
+                                      <div className="col-12 col-lg-6">
+                                          <div className="form-group mb-4">
+                                              {errors.district && errors.district.message ?
+                                                  <small className="text-danger">{errors.district && errors.district.message}</small> :
+                                                  <small>Phone No<span className="text-danger">*</span></small>
+                                              }
 
-                                            <input
-                                                type="text"
-                                                name="deliveryAddress"
-                                                className="form-control shadow-none"
-                                                placeholder="Enter phone number"
-                                                
-                                                ref={register({ required: "Phone number is required" })}
-                                            />
-                                            </div>
-                                        </div>
-                                       }
+                                          <input
+                                              type="text"
+                                              name="deliveryAddress"
+                                              className="form-control shadow-none"
+                                              placeholder="Enter phone number"
+                                              
+                                              ref={register({ required: "Phone number is required" })}
+                                          />
+                                          </div>
+                                      </div>
+                                     }
 
-                                       {/* Name */}
-                                            {
-                                        <div className="col-12 col-lg-6">
-                                            <div className="form-group mb-4">
-                                                {errors.district && errors.district.message ?
-                                                    <small className="text-danger">{errors.district && errors.district.message}</small> :
-                                                    <small>Name<span className="text-danger">*</span></small>
-                                                }
+                                     {/* Name */}
+                                          {
+                                      <div className="col-12 col-lg-6">
+                                          <div className="form-group mb-4">
+                                              {errors.district && errors.district.message ?
+                                                  <small className="text-danger">{errors.district && errors.district.message}</small> :
+                                                  <small>Name<span className="text-danger">*</span></small>
+                                              }
 
-                                            <input
-                                                type="text"
-                                                name="deliveryAddress"
-                                                className="form-control shadow-none"
-                                                placeholder="Enter phone number"
-                                                
-                                                ref={register({ required: "Name is required" })}
-                                            />
-                                            </div>
-                                        </div>
-                                       }
-
+                                          <input
+                                              type="text"
+                                              name="deliveryAddress"
+                                              className="form-control shadow-none"
+                                              placeholder="Enter phone number"
+                                              
+                                              ref={register({ required: "Name is required" })}
+                                          />
+                                          </div>
+                                      </div>
+                                     }
 
 
-                                    {/* Email*/}
-                                    {
-                                        <div className="col-12 col-lg-6">
-                                            <div className="form-group mb-4">
-                                                {errors.area && errors.area.message ?
-                                                    <small className="text-danger">{errors.area && errors.area.message}</small> :
-                                                    <small>Email</small>
-                                                }
-                                                <input
-                                                type="email"
-                                                name="deliveryAddress"
-                                                className="form-control shadow-none"
-                                                placeholder="example@gmail.com"
-                                                
-                                                ref={register('email')}
-                                            />
-                                            </div>
-                                        </div>
-                                        }
 
-                                        {/* Zone */}
-                                        {
-                                        <div className="col-12 col-lg-6">
-                                        <div className="form-group mb-4">
-                                            {errors.division && errors.division.message ?
-                                                <small className="text-danger">{errors.division && errors.division.message}</small> :
-                                                <small>Zone<span className="text-danger">*</span></small>
-                                            }
+                                  {/* Email*/}
+                                  {
+                                      <div className="col-12 col-lg-6">
+                                          <div className="form-group mb-4">
+                                              {errors.area && errors.area.message ?
+                                                  <small className="text-danger">{errors.area && errors.area.message}</small> :
+                                                  <small>Email</small>
+                                              }
+                                              <input
+                                              type="email"
+                                              name="deliveryAddress"
+                                              className="form-control shadow-none"
+                                              placeholder="example@gmail.com"
+                                              
+                                              ref={register('email')}
+                                          />
+                                          </div>
+                                      </div>
+                                      }
 
-                                            <SingleSelect
-                                                options={divisions}
-                                                placeholder={'zone'}
-                                                borderRadius={4}
-                                                error={errors.division && errors.division.message}
-                                                value={(event) => {
-                                                    
-                                                    clearErrors("zone")
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                        }
+                                      {/* Zone */}
+                                      {
+                                      <div className="col-12 col-lg-6">
+                                      <div className="form-group mb-4">
+                                          {errors.division && errors.division.message ?
+                                              <small className="text-danger">{errors.division && errors.division.message}</small> :
+                                              <small>Zone<span className="text-danger">*</span></small>
+                                          }
 
-                                          {/* Processing price */}
-                    
-                        <div className="col-12 py-3">
-                            <div className="card border-0 shadow-sm">
-                                <div className="card-body p-4">
-                                    <div>
-                                        {/* Payment method */}
-                                        <div>
-                                            <div className="form-group mb-4">
-                                                <p>Payment method</p>
+                                          <SingleSelect
+                                              options={divisions}
+                                              placeholder={'zone'}
+                                              borderRadius={4}
+                                              error={errors.division && errors.division.message}
+                                              value={(event) => {
+                                                  
+                                                  clearErrors("zone")
+                                              }}
+                                          />
+                                      </div>
+                      </div>
+                                      }
 
-                                                <select
-                                                    name="paymentMethod"
-                                                    className="form-control shadow-none"
-                                                    defaultValue="COD"
-                                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                                >
-                                                    <option value="">--- Select Option ---</option>
-                                                    <option value="COD">COD</option>
-                                                    <option value="Paid">Paid</option>
-                                                    <option value="Partial Paid">Partial Paid</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                       
-                                    </div>
-                                    <div className="d-flex">
-                                        <div>
-                                            <p className="text-muted mb-1">Sub-Total</p>
-                                            <p className="text-muted mb-1">Delivery charge </p>
-
-                                        </div>
-                                        <div className="ml-auto">
-                                            <p className="text-muted mb-1">: ৳. 450 {CommaNumber(subTotal)}</p>
-                                            <p className="text-muted mb-1">: ৳. 50{CommaNumber(deliveryCharge)}</p>
-                                        </div>
-                                    </div>
-                                    <hr className="my-2" />
-                                    <div className="d-flex">
-                                        <div>
-                                            <p className="mb-1">Total</p>
-                                        </div>
-                                        <div className="ml-auto">
-
-                                            <p className="mb-1">: ৳. 500 {CommaNumber(total)}</p>
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <CouponApply
-                                        loading={coupon.loading}
-                                        message={coupon.message}
-                                        value={handleCoupon}
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                                    <div className="col-12 text-center py-3">
-                                        <button  className="btn shadow-none success-btn px-4 py-2"
-                                            disabled={process.loading}
-                                        >{process.loading ? "Creating ..." : "Create Order"}</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>       
-                    
-
+                                        {/* Processing price */}
                   
-                
-                  
-                      
-            
-                </div>
+                      <div className="col-12 py-3">
+                          <div className="card border-0 shadow-sm">
+                              <div className="card-body p-4">
+                                  <div>
+                                      {/* Payment method */}
+                                      <div>
+                                          <div className="form-group mb-4">
+                                              <p>Payment method</p>
+
+                                              <select
+                                                  name="paymentMethod"
+                                                  className="form-control shadow-none"
+                                                  defaultValue="COD"
+                                                  onChange={(e) => setPaymentMethod(e.target.value)}
+                                              >
+                                                  <option value="">--- Select Option ---</option>
+                                                  <option value="COD">COD</option>
+                                                  <option value="Paid">Paid</option>
+                                                  <option value="Partial Paid">Partial Paid</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                     
+                                  </div>
+                                  <div className="d-flex">
+                                      <div>
+                                          <p className="text-muted mb-1">Sub-Total</p>
+                                          <p className="text-muted mb-1">Delivery charge </p>
+
+                                      </div>
+                                      <div className="ml-auto">
+                                          <p className="text-muted mb-1">: ৳. 450 {CommaNumber(subTotal)}</p>
+                                          <p className="text-muted mb-1">: ৳. 50{CommaNumber(deliveryCharge)}</p>
+                                      </div>
+                                  </div>
+                                  <hr className="my-2" />
+                                  <div className="d-flex">
+                                      <div>
+                                          <p className="mb-1">Total</p>
+                                      </div>
+                                      <div className="ml-auto">
+
+                                          <p className="mb-1">: ৳. 500 {CommaNumber(total)}</p>
+                                      </div>
+                                  </div>
+                                  <br />
+                                  <CouponApply
+                                      loading={coupon.loading}
+                                      message={coupon.message}
+                                      value={handleCoupon}
+                                  />
+
+                              </div>
+                          </div>
+                      </div>
+
+
+                                  <div className="col-12 text-center py-3">
+                                      <button  className="btn shadow-none success-btn px-4 py-2"
+                                          disabled={process.loading}
+                                      >{process.loading ? "Creating ..." : "Create Order"}</button>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>    
+                   
+
+                 
+               
+                 
+                     
+           
+               </div>:  type? <div className="col-12 text-center py-3">
+                                      <button  className="btn shadow-none success-btn px-4 py-2"
+                                        
+                                      >Go to..</button>
+                                  </div>:<p></p>
+               }
             </div>
         </div>
     );
