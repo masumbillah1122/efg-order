@@ -77,7 +77,6 @@ const Create = () => {
     }
       // Handle coupon
       const handleCoupon = async (data) => {
-
         let products = []
 
         if (selectedItems && selectedItems.length) {
@@ -129,7 +128,6 @@ const Create = () => {
         let items = [...selectedItems]
         let item = { ...items[key] }
         item.quantity += 1
-
         items[key] = item
         setSelectedItems(items)
         setProcess({ ...process, data: null })
@@ -141,7 +139,6 @@ const Create = () => {
         let items = [...selectedItems]
         let item = { ...items[key] }
         item.quantity -= 1
-
         items[key] = item
         setSelectedItems(items)
         setProcess({ ...process, data: null })

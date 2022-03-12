@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 
 export const Customer = (props) => {
-    const { register, handleSubmit, errors } = useForm()
+    const { register, handleSubmit, errors } = useForm();
 
 
     // Submit value

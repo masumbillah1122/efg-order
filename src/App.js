@@ -19,7 +19,6 @@ function App() {
               <Route path="/">
                 <Master />
               </Route>
-             
             </Switch>
           </ScrollToTop>
         </Router>
